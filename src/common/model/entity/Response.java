@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: Response
- * Author:   ITryagain
- * Date:     2019/5/15 18:51
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package common.model.entity;
 
 import java.io.OutputStream;
@@ -15,25 +5,17 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 〈响应对象〉<br>
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/15
- * @since 1.0.0
- */
-
+//响应类
 public class Response implements Serializable {
     private static final long serialVersionUID = 1689541820872288991L;
-    /** 响应状态 */
+    //响应状态
     private ResponseStatus status;
-    /** 响应数据的类型 */
+    //响应数据的类型
     private ResponseType type;
 
     private Map<String, Object> dataMap;
 
-    /** 响应输出流 */
+    //响应输出流
     private OutputStream outputStream;
 
     public Response(){

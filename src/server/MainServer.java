@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: MainServer
- * Author:   ITryagain
- * Date:     2019/5/15 17:07
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package server;
 
 import server.controller.RequestProcessor;
@@ -17,15 +7,6 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-/**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/15
- * @since 1.0.0
- */
 
 public class MainServer {
     public static void main(String[] args) {
@@ -37,7 +18,8 @@ public class MainServer {
             e.printStackTrace();
         }
 
-        new Thread(new Runnable() {//启动新线程进行客户端连接监听
+        //启动新线程进行客户端连接监听
+        new Thread(new Runnable() {
             public void run() {
                 try {
                     while (true) {

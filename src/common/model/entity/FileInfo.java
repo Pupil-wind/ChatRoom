@@ -1,42 +1,24 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: FileInfo
- * Author:   ITryagain
- * Date:     2019/5/15 18:57
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package common.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/15
- * @since 1.0.0
- */
-
+//文件信息
 public class FileInfo implements Serializable {
     private static final long serialVersionUID = -5394575332459969403L;
-    /** 消息接收者 */
+    //消息接收者
     private User toUser;
-    /** 消息发送者 */
+    //消息发送者
     private User fromUser;
-    /** 源文件名 */
+    //源文件名
     private String srcName;
-    /** 发送时间 */
+    //发送时间
     private Date sendTime;
-    /** 目标地IP */
+    //目标地IP
     private String destIp;
-    /** 目标地端口 */
+    //目标地端口
     private int destPort;
-    /** 目标文件名 */
+    //目标文件名
     private String destName;
     public User getToUser() {
         return toUser;

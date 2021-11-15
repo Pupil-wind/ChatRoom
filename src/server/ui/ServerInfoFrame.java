@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: ServerInfoFrame
- * Author:   ITryagain
- * Date:     2019/5/15 18:30
- * Description: 服务器信息窗体
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package server.ui;
 
 import common.model.entity.User;
@@ -31,15 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
-/**
- * 〈一句话功能简述〉<br>
- * 〈服务器信息窗体〉
- *
- * @author ITryagain
- * @create 2019/5/15
- * @since 1.0.0
- */
-
+//服务信息窗口
 public class ServerInfoFrame extends JFrame {
     private static final long serialVersionUID = 6274443611957724780L;
     private JTextField jta_msg;
@@ -52,10 +34,12 @@ public class ServerInfoFrame extends JFrame {
         setVisible(true);
     }
 
-    public void init() {  //初始化窗体
+    //初始化窗体
+    public void init() {
 
         this.setIconImage(new ImageIcon("images/avatar.png").getImage());
-        this.setTitle("服务器控制台");//设置服务器控制台标题
+        //设置服务器控制台标题
+        this.setTitle("服务器控制台");
         this.setBounds((DataBuffer.screenSize.width - 700)/2,
                 (DataBuffer.screenSize.height - 475)/2, 700, 475);
         this.setLayout(new BorderLayout());
@@ -68,7 +52,8 @@ public class ServerInfoFrame extends JFrame {
 
         JLabel label = new JLabel("服务器端口: ");
         panel.add(label);
-        JButton exitBtn = new JButton("关闭服务器");//关闭关闭服务器按钮
+        //关闭关闭服务器按钮
+        JButton exitBtn = new JButton("关闭服务器");
         panel.add(exitBtn);
 
         JLabel la_msg = new JLabel("要发送的消息");
@@ -119,7 +104,8 @@ public class ServerInfoFrame extends JFrame {
                         stateBar.setText("当前时间：" + df.format(new Date()) + "  ");
                     }
                 }, 0, 1000);
-        this.add(stateBar, BorderLayout.SOUTH); //把状态栏添加到窗体的南边
+        //把状态栏添加到窗体的南边
+        this.add(stateBar, BorderLayout.SOUTH);
 
         //关闭窗口
         this.addWindowListener(new WindowAdapter(){
@@ -128,7 +114,7 @@ public class ServerInfoFrame extends JFrame {
             }
         });
 
-        /* 添加关闭服务器按钮事件处理方法 */
+        //添加关闭服务器按钮事件处理方法
         exitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 logout();
@@ -136,34 +122,37 @@ public class ServerInfoFrame extends JFrame {
         });
     }
 
-    /*
-     * 创建表格上的弹出菜单对象，实现发信，踢人功能
-     */
+    //创建表格上的弹出菜单对象，实现发信，踢人功能
     private JPopupMenu getTablePop() {
-        JPopupMenu pop = new JPopupMenu();// 弹出菜单对象
+        //弹出菜单对象
+        JPopupMenu pop = new JPopupMenu();
         JMenuItem mi_send = new JMenuItem("发信");
-        // 菜单项对象
-        mi_send.setActionCommand("send");// 设定菜单命令关键字
-        JMenuItem mi_del = new JMenuItem("踢掉");// 菜单项对象
-        mi_del.setActionCommand("del");// 设定菜单命令关键字
-        // 弹出菜单上的事件监听器对象
+        //菜单项对象
+        //设定菜单命令关键字
+        mi_send.setActionCommand("send");
+        //菜单项对象
+        JMenuItem mi_del = new JMenuItem("踢掉");
+        //设定菜单命令关键字
+        mi_del.setActionCommand("del");
+        //弹出菜单上的事件监听器对象
         ActionListener al = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String s = e.getActionCommand();
-                // 哪个菜单项点击了，这个s就是其设定的ActionCommand
+                //根据点击的菜单项，设定ActionCommand
                 popMenuAction(s);
             }
         };
         mi_send.addActionListener(al);
-        mi_del.addActionListener(al);// 给菜单加上监听器
+        //给菜单加上监听器
+        mi_del.addActionListener(al);
         pop.add(mi_send);
         pop.add(mi_del);
         return pop;
     }
 
-    // 处理弹出菜单上的事件
+    //处理弹出菜单上的事件
     private void popMenuAction(String command) {
-        // 得到在表格上选中的行
+        //得到在表格上选中的行
         final int selectIndex = onlineUserTable.getSelectedRow();
         String usr_id = (String)onlineUserTable.getValueAt(selectIndex,0);
         System.out.println("与用户: "+usr_id+"进行系统通信:");
@@ -173,26 +162,26 @@ public class ServerInfoFrame extends JFrame {
         }
 
         if (command.equals("del")) {
-            // 从线程中移除处理线程对象
+            //从线程中移除处理线程对象
             try {
                 RequestProcessor.remove(DataBuffer.onlineUsersMap.get(Long.valueOf(usr_id)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (command.equals("send")) {
-            final JDialog jd = new JDialog(this, true);// 发送对话框
+            //发送对话框
+            final JDialog jd = new JDialog(this, true);
             jd.setLayout(new FlowLayout());
-            // 对话框设置在屏幕中心, 长380高100
+            //对话框设置在屏幕中心, 长380高100
             jd.setBounds((DataBuffer.screenSize.width - 387)/2,
                     (DataBuffer.screenSize.height - 267)/2,
                     387, 100);
 			jd.setTitle("发送系统消息");
-            // jd.setSize(200, 100);
             final JTextField jtd_m = new JTextField(20);
             JButton jb = new JButton("发送!");
             jd.add(jtd_m);
             jd.add(jb);
-            // 发送按钮的事件实现
+            //发送按钮的事件实现
             jb.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     String msg = jtd_m.getText();
@@ -201,7 +190,8 @@ public class ServerInfoFrame extends JFrame {
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-                    jtd_m.setText("");// 清空输入框
+                    //清空输入框
+                    jtd_m.setText("");
                     jd.dispose();
                     System.out.println("系统消息发送完成...");
                 }
@@ -210,17 +200,18 @@ public class ServerInfoFrame extends JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "未知菜单:" + command);
         }
-        // 刷新表格
+        //刷新表格
         SwingUtilities.updateComponentTreeUI(onlineUserTable);
     }
 
-    // 按下发送服务器消息的按钮，给所有在线用户发送消息
+    //按下发送服务器消息的按钮，给所有在线用户发送消息
     private void sendAllMsg() throws IOException {
         RequestProcessor.board(jta_msg.getText());
-        jta_msg.setText("");// 清空输入框
+        //清空输入框
+        jta_msg.setText("");
     }
 
-    /** 把所有已注册的用户信息加载到RegistedUserTableModel中 */
+    //把所有已注册的用户信息加载到RegistedUserTableModel中
     private void loadData(){
         List<User> users = new UserService().loadAllUser();
         for (User user : users) {
@@ -233,7 +224,7 @@ public class ServerInfoFrame extends JFrame {
         }
     }
 
-    /** 关闭服务器 */
+    //关闭服务器
     private void logout() {
         int select = JOptionPane.showConfirmDialog(ServerInfoFrame.this,
                 "确定关闭吗？\n\n关闭服务器将中断与所有客户端的连接!",

@@ -1,18 +1,7 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: ClientThread
- * Author:   ITryagain
- * Date:     2019/5/16 20:26
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package client;
 
 import client.ui.ChatFrame;
 import client.util.ClientUtil;
-import client.util.JFrameShaker;
 import common.model.entity.*;
 import common.util.IOUtil;
 import common.util.SocketUtil;
@@ -22,17 +11,10 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * 〈一句话功能简述〉<br> 
- * 〈客户端线程，不断监听服务器发送过来的信息〉
- *
- * @author ITryagain
- * @create 2019/5/16
- * @since 1.0.0
- */
 
 public class ClientThread extends Thread {
-    private JFrame currentFrame;  //当前窗体
+    //当前窗体
+    private JFrame currentFrame;
 
     public ClientThread(JFrame frame){
         currentFrame = frame;
@@ -40,11 +22,12 @@ public class ClientThread extends Thread {
 
     public void run() {
         try {
-            while (DataBuffer.clientSeocket.isConnected()) {
+            while (DataBuffer.clientSocket.isConnected()) {
                 Response response = (Response) DataBuffer.ois.readObject();
                 ResponseType type = response.getType();
 
                 System.out.println("获取了响应内容：" + type);
+                //登录
                 if (type == ResponseType.LOGIN) {
                     User newUser = (User)response.getData("loginUser");
                     DataBuffer.onlineUserListModel.addElement(newUser);
@@ -52,7 +35,9 @@ public class ClientThread extends Thread {
                     ChatFrame.onlineCountLbl.setText(
                             "在线用户列表("+ DataBuffer.onlineUserListModel.getSize() +")");
                     ClientUtil.appendTxt2MsgListArea("【系统消息】用户"+newUser.getNickname() + "上线了！\n");
-                }else if(type == ResponseType.LOGOUT){
+                }
+                //登出
+                else if(type == ResponseType.LOGOUT){
                     User newUser = (User)response.getData("logoutUser");
                     DataBuffer.onlineUserListModel.removeElement(newUser);
 
@@ -60,36 +45,45 @@ public class ClientThread extends Thread {
                             "在线用户列表("+ DataBuffer.onlineUserListModel.getSize() +")");
                     ClientUtil.appendTxt2MsgListArea("【系统消息】用户"+newUser.getNickname() + "下线了！\n");
 
-                }else if(type == ResponseType.CHAT){ //聊天
+                }
+                //聊天
+                else if(type == ResponseType.CHAT){
                     Message msg = (Message)response.getData("txtMsg");
                     ClientUtil.appendTxt2MsgListArea(msg.getMessage());
-                }else if(type == ResponseType.SHAKE){ //振动
-                    Message msg = (Message)response.getData("ShakeMsg");
-                    ClientUtil.appendTxt2MsgListArea(msg.getMessage());
-                    new JFrameShaker(this.currentFrame).startShake();
-                }else if(type == ResponseType.TOSENDFILE){ //准备发送文件
+                }
+                //准备发送文件
+                else if(type == ResponseType.TOSENDFILE){
                     toSendFile(response);
-                }else if(type == ResponseType.AGREERECEIVEFILE){ //对方同意接收文件
+                }
+                //对方同意接收文件
+                else if(type == ResponseType.AGREERECEIVEFILE){
                     sendFile(response);
-                }else if(type == ResponseType.REFUSERECEIVEFILE){ //对方拒绝接收文件
+                }
+                //对方拒绝接收文件
+                else if(type == ResponseType.REFUSERECEIVEFILE){
                     ClientUtil.appendTxt2MsgListArea("【文件消息】对方拒绝接收，文件发送失败！\n");
-                }else if(type == ResponseType.RECEIVEFILE){ //开始接收文件
+                }
+                //开始接收文件
+                else if(type == ResponseType.RECEIVEFILE){
                     receiveFile(response);
-                }else if(type == ResponseType.BOARD){
+                }
+                //广播
+                else if(type == ResponseType.BOARD){
                     Message msg = (Message)response.getData("txtMsg");
                     ClientUtil.appendTxt2MsgListArea(msg.getMessage());
-                }else if(type == ResponseType.REMOVE){
+                }
+                //踢除
+                else if(type == ResponseType.REMOVE){
                     ChatFrame.remove();
                 }
             }
-        } catch (IOException e) {
-            //e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException e) {}
+        catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    /** 发送文件 */
+    //发送文件
     private void sendFile(Response response) {
         final FileInfo sendFile = (FileInfo)response.getData("sendFile");
 
@@ -97,10 +91,12 @@ public class ClientThread extends Thread {
         BufferedOutputStream bos = null;
         Socket socket = null;
         try {
-            socket = new Socket(sendFile.getDestIp(),sendFile.getDestPort());//套接字连接
-            bis = new BufferedInputStream(new FileInputStream(sendFile.getSrcName()));//文件读入
-            bos = new BufferedOutputStream(socket.getOutputStream());//文件写出
-
+            //套接字连接
+            socket = new Socket(sendFile.getDestIp(),sendFile.getDestPort());
+            //文件读入
+            bis = new BufferedInputStream(new FileInputStream(sendFile.getSrcName()));
+            //文件写出
+            bos = new BufferedOutputStream(socket.getOutputStream());
             byte[] buffer = new byte[1024];
             int n = -1;
             while ((n = bis.read(buffer)) != -1){
@@ -118,7 +114,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    /** 接收文件 */
+    //接收文件
     private void receiveFile(Response response) {
         final FileInfo sendFile = (FileInfo)response.getData("sendFile");
 
@@ -128,9 +124,12 @@ public class ClientThread extends Thread {
         Socket socket = null;
         try {
             serverSocket = new ServerSocket(sendFile.getDestPort());
-            socket = serverSocket.accept(); //接收
-            bis = new BufferedInputStream(socket.getInputStream());//缓冲读
-            bos = new BufferedOutputStream(new FileOutputStream(sendFile.getDestName()));//缓冲写出
+            //接收
+            socket = serverSocket.accept();
+            //缓冲读
+            bis = new BufferedInputStream(socket.getInputStream());
+            //缓冲写出
+            bos = new BufferedOutputStream(new FileOutputStream(sendFile.getDestName()));
 
             byte[] buffer = new byte[1024];
             int n = -1;
@@ -152,7 +151,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    /** 准备发送文件	 */
+    //准备发送文件
     private void toSendFile(Response response) {
         FileInfo sendFile = (FileInfo)response.getData("sendFile");
 
@@ -181,7 +180,6 @@ public class ClientThread extends Thread {
                     sendFile.setDestPort(DataBuffer.RECEIVE_FILE_PORT);
 
                     request.setAction("agreeReceiveFile");
-//                    receiveFile(response);
                     ClientUtil.appendTxt2MsgListArea("【文件消息】您已同意接收来自 "
                             + fromName +" 的文件，正在接收文件 ...\n");
                 } else {

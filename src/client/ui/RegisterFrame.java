@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: RegisterFrame
- * Author:   ITryagain
- * Date:     2019/5/16 20:23
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package client.ui;
 
 import client.util.ClientUtil;
@@ -24,15 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-/**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/16
- * @since 1.0.0
- */
-
+//注册窗口
 public class RegisterFrame extends JFrame {
     private static final long serialVersionUID = -768631070458723803L;
     private JPasswordField pwdFld;
@@ -52,18 +34,21 @@ public class RegisterFrame extends JFrame {
 
     public void init(){
         this.setIconImage(new ImageIcon("images/clientAvatar.png").getImage());
-        this.setTitle("注册新的聊天室账号");//设置标题
+        //设置标题
+        this.setTitle("注册新的聊天室账号");
         setBounds((DataBuffer.screenSize.width - 387)/2,
                 (DataBuffer.screenSize.height - 267)/2,
                 387, 267);
         getContentPane().setLayout(null);
         setResizable(false);
 
-        JLabel label = new JLabel("昵称:"); //label显示
+        //label显示
+        JLabel label = new JLabel("昵称:");
         label.setBounds(24, 36, 59, 17);
         getContentPane().add(label);
 
-        nickname = new JTextField(); //昵称
+        //昵称
+        nickname = new JTextField();
         nickname.setBounds(90, 34, 110, 22);
         getContentPane().add(nickname);
 
@@ -75,7 +60,8 @@ public class RegisterFrame extends JFrame {
         label3.setBounds(24, 107, 65, 17);
         getContentPane().add(label3);
 
-        pwdFld = new JPasswordField();//密码框
+        //密码框
+        pwdFld = new JPasswordField();
         pwdFld.setBounds(90, 70, 110, 22);
         getContentPane().add(pwdFld);
 
@@ -93,7 +79,9 @@ public class RegisterFrame extends JFrame {
         sex0 = new JRadioButton("女");
         sex0.setBounds(310, 31, 44, 25);
         getContentPane().add(sex0);
-        ButtonGroup buttonGroup = new ButtonGroup();//单选按钮组
+
+        //单选按钮组
+        ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(sex0);
         buttonGroup.add(sex1);
 
@@ -101,12 +89,13 @@ public class RegisterFrame extends JFrame {
         label6.setBounds(230, 72, 31, 17);
         getContentPane().add(label6);
 
-        head = new JComboBox();//下拉列表图标
+        //下拉列表图标
+        head = new JComboBox();
         head.setBounds(278, 70, 65, 45);
         head.setMaximumRowCount(5);
         for (int i = 0; i < 11; i++) {
-            head.addItem(new ImageIcon("images/" + i + ".png"));
             //通过循环添加图片，注意图片名字要取成1,2,3,4,5,等
+            head.addItem(new ImageIcon("images/" + i + ".png"));
         }
         head.setSelectedIndex(0);
         getContentPane().add(head);
@@ -124,13 +113,14 @@ public class RegisterFrame extends JFrame {
         cancel.setBounds(268, 176, 60, 28);
         getContentPane().add(cancel);
 
-        //////////////////////注册事件监听器////////////////////////
+        //注册事件监听器
         //取消按钮监听事件处理
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 RegisterFrame.this.dispose();
             }
         });
+
         //关闭窗口
         this.addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e) {
@@ -144,23 +134,26 @@ public class RegisterFrame extends JFrame {
                 nickname.setText("");
                 pwdFld.setText("");
                 pwd2Fld.setText("");
-                nickname.requestFocusInWindow();//用户名获得焦点
+                //用户名获得焦点
+                nickname.requestFocusInWindow();
             }
         });
 
         //确认按钮监听事件处理
         ok.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
+                //判断用户名和密码是否为空
                 if (pwdFld.getPassword().length==0 || pwd2Fld.getPassword().length==0) {
                     JOptionPane.showMessageDialog(RegisterFrame.this, "带 “ * ” 为必填内容!");
-                    //判断用户名和密码是否为空
-                } else if (!new String(pwdFld.getPassword()).equals(new String(pwd2Fld.getPassword()))) {
+                }
+                //判断两次密码是否一致
+                else if (!new String(pwdFld.getPassword()).equals(new String(pwd2Fld.getPassword()))) {
                     JOptionPane.showMessageDialog(RegisterFrame.this, "两次输入密码不一致!");
                     pwdFld.setText("");
                     pwd2Fld.setText("");
                     pwdFld.requestFocusInWindow();
-                    //判断两次密码是否一致
-                } else {
+                }
+                else {
                     User user = new User(new String(pwdFld.getPassword()),
                             nickname.getText(),
                             sex0.isSelected() ? 'f' : 'm',
@@ -176,6 +169,7 @@ public class RegisterFrame extends JFrame {
             }
         });
     }
+
     //注册方法
     private void register(User user) throws IOException, ClassNotFoundException{
         Request request = new Request();

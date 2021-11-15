@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: UserService
- * Author:   ITryagain
- * Date:     2019/5/15 18:34
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package server.model.service;
 
 import common.model.entity.User;
@@ -22,17 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-/**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/15
- * @since 1.0.0
- */
-
+//用户服务类
 public class UserService {
-    /** 新增用户 */
+    //新增用户
     public void addUser(User user){
         List<User> users = loadAllUser();
         int idCount = users.size();
@@ -41,7 +23,7 @@ public class UserService {
         saveAllUser(users);
     }
 
-    /** 用户登录 */
+    //用户登录
     public User login(long id, String password){
         User result = null;
         List<User> users = loadAllUser();
@@ -54,7 +36,7 @@ public class UserService {
         return result;
     }
 
-    /** 根据ID加载用户 */
+    //根据ID加载用户
     public User loadUser(long id){
         User result = null;
         List<User> users = loadAllUser();
@@ -68,7 +50,7 @@ public class UserService {
     }
 
 
-    /** 加载所有用户 */
+    //加载所有用户
     @SuppressWarnings("unchecked")
     public List<User> loadAllUser() {
         List<User> list = null;
@@ -87,6 +69,7 @@ public class UserService {
         return list;
     }
 
+    //保存用户信息
     private void saveAllUser(List<User> users) {
         ObjectOutputStream oos = null;
         try {
@@ -103,9 +86,7 @@ public class UserService {
         }
     }
 
-
-
-    /** 初始化几个测试用户 */
+    //初始化几个测试用户
     public void initUser(){
         User user = new User("admin", "Admin", 'm', 0);
         user.setId(1);

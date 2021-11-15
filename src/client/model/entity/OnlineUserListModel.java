@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: OnlineUserListModel
- * Author:   ITryagain
- * Date:     2019/5/16 20:21
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package client.model.entity;
 
 import java.util.List;
@@ -16,15 +6,7 @@ import javax.swing.AbstractListModel;
 
 import common.model.entity.User;
 
-/**
- * 〈在线用户JList的Model〉<br>
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/16
- * @since 1.0.0
- */
-
+//在线用户表
 public class OnlineUserListModel extends AbstractListModel {
     private static final long serialVersionUID = -3903760573171074301L;
     private List<User> onlineUsers;
@@ -33,6 +15,7 @@ public class OnlineUserListModel extends AbstractListModel {
         this.onlineUsers = onlineUsers;
     }
 
+    //增加操作
     public void addElement(Object object) {
         if (onlineUsers.contains(object)) {
             return;
@@ -42,6 +25,7 @@ public class OnlineUserListModel extends AbstractListModel {
         fireIntervalAdded(this, index, index);
     }
 
+    //移除操作
     public boolean removeElement(Object object) {
         int index = onlineUsers.indexOf(object);
         if (index >= 0) {
@@ -50,10 +34,12 @@ public class OnlineUserListModel extends AbstractListModel {
         return onlineUsers.remove(object);
     }
 
+    //获取大小
     public int getSize() {
         return onlineUsers.size();
     }
 
+    //获取对象
     public Object getElementAt(int i) {
         return onlineUsers.get(i);
     }

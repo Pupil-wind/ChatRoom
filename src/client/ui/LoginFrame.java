@@ -1,13 +1,3 @@
-/**
- * Copyright (C), 2015-2019, XXX有限公司
- * FileName: LoginFrame
- * Author:   ITryagain
- * Date:     2019/5/16 20:23
- * Description:
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
 package client.ui;
 
 import client.DataBuffer;
@@ -30,15 +20,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * 〈一句话功能简述〉<br> 
- * 〈〉
- *
- * @author ITryagain
- * @create 2019/5/16
- * @since 1.0.0
- */
-
+//登录窗口
 public class LoginFrame extends JFrame {
     private static final long serialVersionUID = -3426717670093483287L;
 
@@ -129,7 +111,7 @@ public class LoginFrame extends JFrame {
         });
     }
 
-    /** 登录 */
+    //登录
     @SuppressWarnings("unchecked")
     private void login() {
         if (idTxt.getText().length() == 0
@@ -165,14 +147,17 @@ public class LoginFrame extends JFrame {
         if(response.getStatus() == ResponseStatus.OK){
             //获取当前用户
             User user2 = (User)response.getData("user");
-            if(user2!= null){ //登录成功
+            if(user2!= null){
+                //登录成功
                 DataBuffer.currentUser = user2;
                 //获取当前在线用户列表
                 DataBuffer.onlineUsers = (List<User>)response.getData("onlineUsers");
 
                 LoginFrame.this.dispose();
-                new ChatFrame();  //打开聊天窗体
-            }else{ //登录失败
+                //打开聊天窗体
+                new ChatFrame();
+            }else{
+                //登录失败
                 String str = (String)response.getData("msg");
                 JOptionPane.showMessageDialog(LoginFrame.this,
                         str,
